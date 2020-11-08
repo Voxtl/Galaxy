@@ -12,7 +12,7 @@ module.exports = function(req:any, res:any, next:any) {
 
         axios({
             method: 'post',
-            url: 'http://localhost:3001/token/validate',
+            url: 'https://auth.voxtl.tv/token/validate',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify({'access_token': token})
         }).then(response => {
