@@ -41,6 +41,6 @@ app.use('/users', usersRoute);
 app.use('/ingest', ingestRoute);
 
 // Run server
-app.listen(port, () => {
-    console.log(`${chalk.bgGreen.black.bold('STATUS')} Galaxy is now listening on *:${port}.`);
+app.listen(port, '127.0.0.1', () => {
+    console.log(`${chalk.bgGreen.black.bold('STATUS')} Galaxy is now listening on 127.0.0.1:${port}.`);
 });
