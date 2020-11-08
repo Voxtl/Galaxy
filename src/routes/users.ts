@@ -1,4 +1,3 @@
-import { UserState } from '@fusionauth/typescript-client';
 import express from 'express';
 import database from '../wrappers/database';
 const Redis = require('../helpers/Redis');
