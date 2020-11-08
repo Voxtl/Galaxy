@@ -5,8 +5,8 @@ import redis from '../helpers/Redis';
 const router = express.Router();
 
 router.post('/publish', (req, res) => {
-    let reqId = req.body.name.slice(0, 16);
-    let reqStreamKey = req.body.name.slice(16);
+    let reqId = req.body.name.slice(0, 36);
+    let reqStreamKey = req.body.name.slice(36);
 
     database.query('SELECT * FROM users WHERE id = ?', [reqId], function(error, result) {
         if(error) {
@@ -63,8 +63,8 @@ router.post('/publish', (req, res) => {
 });
 
 router.post('/end', (req, res) => {
-    let reqId = req.body.name.slice(0, 16);
-    let reqStreamKey = req.body.name.slice(16);
+    let reqId = req.body.name.slice(0, 36);
+    let reqStreamKey = req.body.name.slice(36);
 
     database.query('SELECT * FROM users WHERE id = ?', [reqId], function(error, result) {
         if(error) {
