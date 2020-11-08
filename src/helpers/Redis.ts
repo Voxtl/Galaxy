@@ -1,8 +1,8 @@
 import redis, { RedisClient } from 'redis';
 
 let Redis:RedisClient = redis.createClient({
-    host: 'web-1.fra-de.voxtl.com',
-    password: 'cCphPDBpasnphATQzbYP24WobuU4sPLb9jtszxUdtmisC6GL2QfxSAJhKAs9sjo2LpbysGXusLpu4MlBuNH65w7tlZNCEid8wmLUjkhBfrqk2lpU3UMAOswUVBpZ4LRQ'
+    host: process.env.REDIS_HOST,
+    password: process.env.REDIS_PASSWORD
 });
 
 module.exports = Redis;
