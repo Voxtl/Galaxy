@@ -197,4 +197,70 @@ router.get('/:user/channel/key', async (req, res) => {
     });
 });
 
+router.put('/update', async (req, res) => {
+    if(typeof req.body !== 'object') {
+        res.status(400).json({
+            status: 400,
+            message: 'You have not sent any data.'
+        });
+        return;
+    }
+
+    const users = ['email', 'stream_key'];
+    const users_info = ['channel_title', 'channel_category', 'profile_bio', 'profile_description'];
+
+    let i = 0;
+    for(const [key, value] of Object.entries(req.body)) {
+        i++;
+
+        let data:string = "";
+        if(typeof value === 'string') data = value;
+
+        // TODO: Add email and stream_key updating.
+        if(users.includes(key)) {
+
+        } else if(users_info.includes(key)) {
+            database.query(`UPDATE users_info SET ${key} = '${encodeURI(data)}' WHERE id = '${res.locals.data.result.user_id}'`, function(error, result) {
+                if(error) {
+                    console.error(error);
+        
+                    res.status(500).json({
+                        status: 500,
+                        message: 'There was an internal server error. Please try again soon.'
+                    });
+                    return;
+                }
+
+                let time = Math.floor(new Date().getTime() / 1000);
+
+                database.query(`UPDATE users SET updated = ${time} WHERE id = '${res.locals.data.result.user_id}'`, function(error, result) {
+                    if(error) {
+                        console.error(error);
+            
+                        res.status(500).json({
+                            status: 500,
+                            message: 'There was an internal server error. Please try again soon.'
+                        });
+                        return;
+                    }
+
+                    if(i == Object.entries(req.body).length) {
+                        res.status(200).json({
+                            status: 200,
+                            message: 'You have updated your user.'
+                        });
+                        return;
+                    }
+                });
+            });
+        } else {
+            res.status(400).json({
+                status: 400,
+                message: 'Invalid preference.'
+            });
+            return;
+        }
+    }
+});
+
 export default router;
