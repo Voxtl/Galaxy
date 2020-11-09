@@ -1,12 +1,14 @@
 import express from 'express';
 import { promisify } from 'util';
-import redis from '../helpers/Redis';
+import { Redis as redis } from '../helpers/Redis';
 
-let getAsync = promisify(redis.get).bind(redis);
-let smembersAsync = promisify(redis.smembers).bind(redis);
+const getAsync = promisify(redis.get).bind(redis);
+const smembersAsync = promisify(redis.smembers).bind(redis);
 
-const router = express.Router();
-router.use(require('../middleware/authentication'));
+export const channels = express.Router();
+//TODO: Implement this better.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+channels.use(require('../middleware/authentication'));
 
 interface RedisChannel {
     username: string;
@@ -14,27 +16,27 @@ interface RedisChannel {
     viewers: number;
 }
 
-router.get('/all', async (req, res) => {
+channels.get('/all', async (req, res) => {
     redis.keys('channel:*:info', async function(error:any, result:any) {
         if(error) {
             console.error(error);
 
             res.status(500).json({
                 status: 500,
-                message: "There was an internal server error. Please try again soon."
+                message: 'There was an internal server error. Please try again soon.'
             });
             return;
         }
 
-        let channels:Array<any> = await Promise.all(result.map(async (redisChannel:any) => {
-            let channelData = redisChannel.split(':');
+        const channels:Array<any> = await Promise.all(result.map(async (redisChannel:any) => {
+            const channelData = redisChannel.split(':');
 
-            let channelInfo = await getAsync(`channel:${channelData[1]}:info`);
-            let channelArray:RedisChannel = JSON.parse(channelInfo || '{}');
+            const channelInfo = await getAsync(`channel:${channelData[1]}:info`);
+            const channelArray:RedisChannel = JSON.parse(channelInfo || '{}');
 
-            let viewers:Array<any> = await smembersAsync(`channel:${channelData[1]}:viewers`);
+            const viewers:Array<any> = await smembersAsync(`channel:${channelData[1]}:viewers`);
 
-            let result = {
+            const result = {
                 id: channelData[1],
                 username: channelArray.username,
                 category: channelArray.category,
@@ -50,5 +52,3 @@ router.get('/all', async (req, res) => {
         });
     });
 });
-
-module.exports = router;

@@ -1,12 +1,12 @@
 import express from 'express';
-import database from '../wrappers/database';
-import redis from '../helpers/Redis';
+import { database } from '../wrappers/database';
+import { Redis as redis } from '../helpers/Redis';
 
-const router = express.Router();
+export const ingest = express.Router();
 
-router.post('/publish', (req, res) => {
-    let reqId = req.body.name.slice(0, 36);
-    let reqStreamKey = req.body.name.slice(36);
+ingest.post('/publish', (req, res) => {
+    const reqId = req.body.name.slice(0, 36);
+    const reqStreamKey = req.body.name.slice(36);
 
     database.query('SELECT * FROM users WHERE id = ?', [reqId], function(error, result) {
         if(error) {
@@ -14,7 +14,7 @@ router.post('/publish', (req, res) => {
 
             res.status(500).json({
                 status: 500,
-                message: "There was an internal server error. Please try again soon."
+                message: 'There was an internal server error. Please try again soon.'
             });
             return;
         }
@@ -22,12 +22,12 @@ router.post('/publish', (req, res) => {
         if(!result[0]) {
             res.status(404).json({
                 status: 404,
-                message: "This user could not be found"
+                message: 'This user could not be found'
             });
             return;
         }
 
-        let user = result[0];
+        const user = result[0];
 
         database.query('SELECT * FROM users_info WHERE id = ?', [user.id], function(error, result) {
             if(error) {
@@ -35,12 +35,12 @@ router.post('/publish', (req, res) => {
     
                 res.status(500).json({
                     status: 500,
-                    message: "There was an internal server error. Please try again soon."
+                    message: 'There was an internal server error. Please try again soon.'
                 });
                 return;
             }
 
-            let userInfo = result[0];
+            const userInfo = result[0];
 
             if(reqStreamKey == user.stream_key) {
                 redis.set(`channel:${user.id}:info`, JSON.stringify({
@@ -56,15 +56,15 @@ router.post('/publish', (req, res) => {
                 res.status(402).send({
                     'status': 402,
                     'message': 'You sent an invalid stream key.'
-                })
+                });
             }
         });
     });
 });
 
-router.post('/end', (req, res) => {
-    let reqId = req.body.name.slice(0, 36);
-    let reqStreamKey = req.body.name.slice(36);
+ingest.post('/end', (req, res) => {
+    const reqId = req.body.name.slice(0, 36);
+    const reqStreamKey = req.body.name.slice(36);
 
     database.query('SELECT * FROM users WHERE id = ?', [reqId], function(error, result) {
         if(error) {
@@ -72,7 +72,7 @@ router.post('/end', (req, res) => {
 
             res.status(500).json({
                 status: 500,
-                message: "There was an internal server error. Please try again soon."
+                message: 'There was an internal server error. Please try again soon.'
             });
             return;
         }
@@ -80,12 +80,12 @@ router.post('/end', (req, res) => {
         if(!result[0]) {
             res.status(404).json({
                 status: 404,
-                message: "This user could not be found"
+                message: 'This user could not be found'
             });
             return;
         }
 
-        let user = result[0];
+        const user = result[0];
 
         database.query('SELECT * FROM users_info WHERE id = ?', [user.id], function(error, result) {
             if(error) {
@@ -93,12 +93,12 @@ router.post('/end', (req, res) => {
     
                 res.status(500).json({
                     status: 500,
-                    message: "There was an internal server error. Please try again soon."
+                    message: 'There was an internal server error. Please try again soon.'
                 });
                 return;
             }
 
-            let userInfo = result[0];
+            const userInfo = result[0];
 
             if(reqStreamKey == user.stream_key) {
                 redis.del(`channel:${user.id}:info`);
@@ -114,5 +114,3 @@ router.post('/end', (req, res) => {
         });
     });
 });
-
-module.exports = router;
