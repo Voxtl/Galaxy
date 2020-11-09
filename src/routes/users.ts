@@ -214,7 +214,7 @@ router.put('/update', async (req, res) => {
     for(const [key, value] of Object.entries(req.body)) {
         i++;
 
-        if(!err) return;
+        if(err) return;
 
         let data:string = "";
         if(typeof value === 'string') data = value;
