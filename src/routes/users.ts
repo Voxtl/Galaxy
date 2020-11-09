@@ -1,11 +1,12 @@
 import express from 'express';
 import database from '../wrappers/database';
-const Redis = require('../helpers/Redis');
+import redis from '../helpers/Redis';
+import authentication from '../middleware/authentication';
 
-const users = express.Router();
-users.use(require('../middleware/authentication'));
+const router = express.Router();
+router.use(authentication);
 
-users.get('/:user/profile', (req, res) => {
+router.get('/:user/profile', (req, res) => {
     let user;
     if(req.params.user === '@me') {
         user = res.locals.data.result.user_id;
@@ -19,7 +20,7 @@ users.get('/:user/profile', (req, res) => {
 
             res.status(500).json({
                 status: 500,
-                message: "There was an internal server error. Please try again soon."
+                message: 'There was an internal server error. Please try again soon.'
             });
             return;
         }
@@ -27,12 +28,12 @@ users.get('/:user/profile', (req, res) => {
         if(!result[0]) {
             res.status(404).json({
                 status: 404,
-                message: "This user could not be found"
+                message: 'This user could not be found'
             });
             return;
         }
 
-        let user = result[0];
+        const user = result[0];
 
         database.query('SELECT * FROM users_info WHERE id = ?', [user.id], function(error, result) {
             if(error) {
@@ -40,12 +41,12 @@ users.get('/:user/profile', (req, res) => {
     
                 res.status(500).json({
                     status: 500,
-                    message: "There was an internal server error. Please try again soon."
+                    message: 'There was an internal server error. Please try again soon.'
                 });
                 return;
             }
 
-            let userInfo = result[0];
+            const userInfo = result[0];
 
             res.status(200).json({
                 status: 200,
@@ -66,7 +67,7 @@ users.get('/:user/profile', (req, res) => {
     });
 });
 
-users.get('/:user/channel', async (req, res) => {
+router.get('/:user/channel', async (req, res) => {
     let user;
     if(req.params.user === '@me') {
         user = res.locals.data.result.user_id;
@@ -80,7 +81,7 @@ users.get('/:user/channel', async (req, res) => {
 
             res.status(500).json({
                 status: 500,
-                message: "There was an internal server error. Please try again soon."
+                message: 'There was an internal server error. Please try again soon.'
             });
             return;
         }
@@ -88,12 +89,12 @@ users.get('/:user/channel', async (req, res) => {
         if(!result[0]) {
             res.status(404).json({
                 status: 404,
-                message: "This user could not be found"
+                message: 'This user could not be found'
             });
             return;
         }
 
-        let user = result[0];
+        const user = result[0];
 
         database.query('SELECT * FROM users_info WHERE id = ?', [user.id], function(error, result) {
             if(error) {
@@ -101,25 +102,25 @@ users.get('/:user/channel', async (req, res) => {
     
                 res.status(500).json({
                     status: 500,
-                    message: "There was an internal server error. Please try again soon."
+                    message: 'There was an internal server error. Please try again soon.'
                 });
                 return;
             }
 
-            let userInfo = result[0];
+            const userInfo = result[0];
 
-            Redis.SMEMBERS(`stream:${user.id}:viewers`, function(_error:any, result:any) {
+            redis.SMEMBERS(`stream:${user.id}:viewers`, function(_error:any, result:any) {
                 if(error) {
                     console.error(error);
         
                     res.status(500).json({
                         status: 500,
-                        message: "There was an internal server error. Please try again soon."
+                        message: 'There was an internal server error. Please try again soon.'
                     });
                     return;
                 }
 
-                let viewers:Array<any> = [];
+                const viewers:Array<any> = [];
                 result.forEach((viewer:any) => {
                     viewers.push(JSON.parse(viewer).id);
                 });
@@ -147,7 +148,7 @@ users.get('/:user/channel', async (req, res) => {
 });
 
 
-users.get('/:user/channel/key', async (req, res) => {
+router.get('/:user/channel/key', async (req, res) => {
     if(req.params.user === '@me') {
         req.params.user = res.locals.data.result.user_id;
     }
@@ -158,7 +159,7 @@ users.get('/:user/channel/key', async (req, res) => {
 
             res.status(500).json({
                 status: 500,
-                message: "There was an internal server error. Please try again soon."
+                message: 'There was an internal server error. Please try again soon.'
             });
             return;
         }
@@ -166,17 +167,17 @@ users.get('/:user/channel/key', async (req, res) => {
         if(!result[0]) {
             res.status(404).json({
                 status: 404,
-                message: "This user could not be found"
+                message: 'This user could not be found'
             });
             return;
         }
 
-        let user = result[0];
+        const user = result[0];
 
         if(req.params.user !== '@me' && req.params.user !== user.id && req.params.user !== user.username) {
             res.status(401).json({
                 status: 401,
-                message: "You do not have access to this resource."
+                message: 'You do not have access to this resource.'
             });
             return;
         }
@@ -196,4 +197,4 @@ users.get('/:user/channel/key', async (req, res) => {
     });
 });
 
-module.exports = users;
+export default router;

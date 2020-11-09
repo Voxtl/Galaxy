@@ -1,6 +1,6 @@
 import mysql from 'mysql';
 
-const con = mysql.createPool({
+const database = mysql.createPool({
     connectionLimit: 20,
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -8,5 +8,4 @@ const con = mysql.createPool({
     database: process.env.DB_DATABASE
 });
 
-module.exports = con;
-export default con;
+export default database;

@@ -30,15 +30,15 @@ app.use(cors({ origin: '*' }));
 
 // Load routes
 console.log(`${chalk.bgCyan.black.bold('INFO')} Loading routes.`);
-const categoriesRoute = require('./routes/categories');
-const channelsRoute = require('./routes/channels');
-const usersRoute = require('./routes/users');
-const ingestRoute = require('./routes/ingest');
+import categories from './routes/categories';
+import channels from './routes/channels';
+import users from './routes/users';
+import ingest from './routes/ingest';
 
-app.use('/categories', categoriesRoute);
-app.use('/channels', channelsRoute);
-app.use('/users', usersRoute);
-app.use('/ingest', ingestRoute);
+app.use('/categories', categories);
+app.use('/channels', channels);
+app.use('/users', users);
+app.use('/ingest', ingest);
 
 // Run server
 app.listen(port, '127.0.0.1', () => {

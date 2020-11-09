@@ -1,7 +1,8 @@
 import express from 'express';
-const router = express.Router();
+import authentication from '../middleware/authentication';
 
-router.use(require('../middleware/authentication'));
+const router = express.Router();
+router.use(authentication);
 
 router.get('/top', (req, res) => {
     res.send(req.params);
@@ -11,4 +12,4 @@ router.get('/:category/info', (req, res) => {
     res.send(req.params);
 });
 
-module.exports = router;
+export default router;
