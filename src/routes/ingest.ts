@@ -1,10 +1,12 @@
 import express from 'express';
-import { database } from '../wrappers/database';
-import { Redis as redis } from '../helpers/Redis';
+import database from '../wrappers/database';
+import redis from '../helpers/Redis';
+import authentication from '../middleware/authentication';
 
-export const ingest = express.Router();
+const router = express.Router();
+router.use(authentication);
 
-ingest.post('/publish', (req, res) => {
+router.post('/publish', (req, res) => {
     const reqId = req.body.name.slice(0, 36);
     const reqStreamKey = req.body.name.slice(36);
 
@@ -62,7 +64,7 @@ ingest.post('/publish', (req, res) => {
     });
 });
 
-ingest.post('/end', (req, res) => {
+router.post('/end', (req, res) => {
     const reqId = req.body.name.slice(0, 36);
     const reqStreamKey = req.body.name.slice(36);
 
@@ -114,3 +116,5 @@ ingest.post('/end', (req, res) => {
         });
     });
 });
+
+export default router;

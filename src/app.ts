@@ -30,10 +30,10 @@ app.use(cors({ origin: '*' }));
 
 // Load routes
 console.log(`${chalk.bgCyan.black.bold('INFO')} Loading routes.`);
-import { categories } from './routes/categories';
-import { channels} from './routes/channels';
-import { users } from './routes/users';
-import { ingest } from './routes/ingest';
+import categories from './routes/categories';
+import channels from './routes/channels';
+import users from './routes/users';
+import ingest from './routes/ingest';
 
 app.use('/categories', categories);
 app.use('/channels', channels);

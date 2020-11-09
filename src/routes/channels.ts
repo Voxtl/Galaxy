@@ -1,14 +1,13 @@
 import express from 'express';
 import { promisify } from 'util';
-import { Redis as redis } from '../helpers/Redis';
+import redis from '../helpers/Redis';
+import authentication from '../middleware/authentication';
 
 const getAsync = promisify(redis.get).bind(redis);
 const smembersAsync = promisify(redis.smembers).bind(redis);
 
-export const channels = express.Router();
-//TODO: Implement this better.
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-channels.use(require('../middleware/authentication'));
+const router = express.Router();
+router.use(authentication);
 
 interface RedisChannel {
     username: string;
@@ -16,7 +15,7 @@ interface RedisChannel {
     viewers: number;
 }
 
-channels.get('/all', async (req, res) => {
+router.get('/all', async (req, res) => {
     redis.keys('channel:*:info', async function(error:any, result:any) {
         if(error) {
             console.error(error);
@@ -52,3 +51,5 @@ channels.get('/all', async (req, res) => {
         });
     });
 });
+
+export default router;

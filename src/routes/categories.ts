@@ -1,15 +1,15 @@
 import express from 'express';
+import authentication from '../middleware/authentication';
 
-export const categories = express.Router();
+const router = express.Router();
+router.use(authentication);
 
-//TODO: Implement this better
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-categories.use(require('../middleware/authentication'));
-
-categories.get('/top', (req, res) => {
+router.get('/top', (req, res) => {
     res.send(req.params);
 });
 
-categories.get('/:category/info', (req, res) => {
+router.get('/:category/info', (req, res) => {
     res.send(req.params);
 });
+
+export default router;

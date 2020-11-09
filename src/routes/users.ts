@@ -1,13 +1,12 @@
 import express from 'express';
-import { database } from '../wrappers/database';
-import { Redis } from '../helpers/Redis';
+import database from '../wrappers/database';
+import redis from '../helpers/Redis';
+import authentication from '../middleware/authentication';
 
-export const users = express.Router();
-//TODO: Implement this better.
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-users.use(require('../middleware/authentication'));
+const router = express.Router();
+router.use(authentication);
 
-users.get('/:user/profile', (req, res) => {
+router.get('/:user/profile', (req, res) => {
     let user;
     if(req.params.user === '@me') {
         user = res.locals.data.result.user_id;
@@ -68,7 +67,7 @@ users.get('/:user/profile', (req, res) => {
     });
 });
 
-users.get('/:user/channel', async (req, res) => {
+router.get('/:user/channel', async (req, res) => {
     let user;
     if(req.params.user === '@me') {
         user = res.locals.data.result.user_id;
@@ -110,7 +109,7 @@ users.get('/:user/channel', async (req, res) => {
 
             const userInfo = result[0];
 
-            Redis.SMEMBERS(`stream:${user.id}:viewers`, function(_error:any, result:any) {
+            redis.SMEMBERS(`stream:${user.id}:viewers`, function(_error:any, result:any) {
                 if(error) {
                     console.error(error);
         
@@ -149,7 +148,7 @@ users.get('/:user/channel', async (req, res) => {
 });
 
 
-users.get('/:user/channel/key', async (req, res) => {
+router.get('/:user/channel/key', async (req, res) => {
     if(req.params.user === '@me') {
         req.params.user = res.locals.data.result.user_id;
     }
@@ -197,3 +196,5 @@ users.get('/:user/channel/key', async (req, res) => {
         });
     });
 });
+
+export default router;
