@@ -4,7 +4,6 @@ import redis from '../helpers/Redis';
 import authentication from '../middleware/authentication';
 
 const router = express.Router();
-router.use(authentication);
 
 router.post('/publish', (req, res) => {
     const reqId = req.body.name.slice(0, 36);
