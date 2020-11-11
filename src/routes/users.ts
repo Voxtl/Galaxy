@@ -209,13 +209,7 @@ router.put('/update', async (req, res) => {
     const users = ['email', 'stream_key'];
     const users_info = ['channel_title', 'channel_category', 'profile_bio', 'profile_description'];
 
-    let i = 0;
-    let err = false;
     for(const [key, value] of Object.entries(req.body)) {
-        i++;
-
-        if(err) return;
-
         let data:string = "";
         if(typeof value === 'string') data = value;
 
@@ -227,7 +221,6 @@ router.put('/update', async (req, res) => {
                 if(error) {
                     console.error(error);
         
-                    err = true;
                     res.status(500).json({
                         status: 500,
                         message: 'There was an internal server error. Please try again soon.'
@@ -241,7 +234,6 @@ router.put('/update', async (req, res) => {
                     if(error) {
                         console.error(error);
             
-                        err = true;
                         res.status(500).json({
                             status: 500,
                             message: 'There was an internal server error. Please try again soon.'
@@ -249,17 +241,14 @@ router.put('/update', async (req, res) => {
                         return;
                     }
 
-                    if(i == Object.entries(req.body).length) {
-                        res.status(200).json({
-                            status: 200,
-                            message: 'You have updated your user.'
-                        });
-                        return;
-                    }
+                    res.status(200).json({
+                        status: 200,
+                        message: 'You have updated your user.'
+                    });
+                    return;
                 });
             });
         } else {
-            err = true;
             res.status(400).json({
                 status: 400,
                 message: 'Invalid preference.'
