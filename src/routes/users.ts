@@ -178,11 +178,25 @@ router.get('/:user/channel', async (req, res) => {
 
 
 router.get('/:user/channel/key', async (req, res) => {
-    if(req.params.user === '@me') {
-        req.params.user = res.locals.data.result.user_id;
+    let user;
+
+    // Check if guest
+    if(res.locals.guest) {
+        res.status(401).json({
+            status: 401,
+            message: 'You must be logged in.'
+        });
+        
+        return;
+    } else {
+        if(req.params.user === '@me') {
+            user = res.locals.data.result.user_id;
+        } else {
+            user = req.params.user;
+        }
     }
 
-    database.query('SELECT * FROM users WHERE id = ? OR username = ?', [req.params.user, req.params.user], function(error, result) {
+    database.query('SELECT * FROM users WHERE id = ? OR username = ?', [user, user], function(error, result) {
         if(error) {
             console.error(error);
 
@@ -203,13 +217,13 @@ router.get('/:user/channel/key', async (req, res) => {
 
         const user = result[0];
 
-        if(req.params.user !== '@me' && req.params.user !== user.id && req.params.user !== user.username) {
-            res.status(401).json({
-                status: 401,
-                message: 'You do not have access to this resource.'
-            });
-            return;
-        }
+        // if(req.params.user !== '@me' && req.params.user !== user.id && req.params.user !== user.username) {
+        //     res.status(401).json({
+        //         status: 401,
+        //         message: 'You do not have access to this resource.'
+        //     });
+        //     return;
+        // }
 
         res.status(200).json({
             status: 200,
@@ -226,65 +240,93 @@ router.get('/:user/channel/key', async (req, res) => {
     });
 });
 
-router.put('/update', async (req, res) => {
-    if(typeof req.body !== 'object') {
-        res.status(400).json({
-            status: 400,
-            message: 'You have not sent any data.'
-        });
-        return;
-    }
+// router.patch('/@me/profile', async (req, res) => {
 
-    const users = ['email', 'stream_key'];
-    const users_info = ['channel_title', 'channel_category', 'profile_bio', 'profile_description'];
+// });
 
-    for(const [key, value] of Object.entries(req.body)) {
-        let data:string = "";
-        if(typeof value === 'string') data = value;
+// router.patch('/@me/channel', async (req, res) => {
 
-        // TODO: Add email and stream_key updating.
-        if(users.includes(key)) {
+// });
 
-        } else if(users_info.includes(key)) {
-            database.query(`UPDATE users_info SET ${key} = '${encodeURI(data)}' WHERE id = '${res.locals.data.result.user_id}'`, function(error, result) {
-                if(error) {
-                    console.error(error);
+// router.patch('/@me/channel/key', async (req, res) => {
+
+// });
+
+// router.put('/update', async (req, res) => {
+//     let user;
+
+//     // Check if guest
+//     if(res.locals.guest) {
+//         res.status(401).json({
+//             status: 401,
+//             message: 'You must be logged in.'
+//         });
         
-                    res.status(500).json({
-                        status: 500,
-                        message: 'There was an internal server error. Please try again soon.'
-                    });
-                    return;
-                }
+//         return;
+//     } else {
+//         user = res.locals.data.result.user_id;
+//     }
 
-                let time = Math.floor(new Date().getTime() / 1000);
+//     // Make sure body is an object
+//     if(typeof req.body !== 'object') {
+//         res.status(400).json({
+//             status: 400,
+//             message: 'No data sent.',
+//         });
+    
+//         return;
+//     }
 
-                database.query(`UPDATE users SET updated = ${time} WHERE id = '${res.locals.data.result.user_id}'`, function(error, result) {
-                    if(error) {
-                        console.error(error);
-            
-                        res.status(500).json({
-                            status: 500,
-                            message: 'There was an internal server error. Please try again soon.'
-                        });
-                        return;
-                    }
+//     // Make sure object is not empty
+//     if(Object.keys(req.body).length === 0) {
+//         res.status(400).json({
+//             status: 400,
+//             message: 'No data sent.',
+//         });
+    
+//         return;
+//     }
 
-                    res.status(200).json({
-                        status: 200,
-                        message: 'You have updated your user.'
-                    });
-                    return;
-                });
-            });
-        } else {
-            res.status(400).json({
-                status: 400,
-                message: 'Invalid preference.'
-            });
-            return;
-        }
-    }
-});
+//     // Valid options to update
+//     const users = ['username', 'email'];
+//     const usersInfo = ['profile_avatar', 'profile_bio', 'profile_description', 'channel_title', 'channel_thumbnail', 'channel_category'];
+
+//     // Loop through values to update
+//     for(let [key, value] of Object.entries(req.body)) {
+//         // Make sure value is a string
+//         if(typeof value !== 'string') {
+//             res.status(400).json({
+//                 status: 400,
+//                 message: 'Invalid data sent.',
+//             });
+//             return;
+//         }
+
+//         // Check which table to update
+//         if(users.includes(key)) {
+//             // Update users table
+
+//             // Query database
+//             let time = Math.floor(new Date().getTime() / 1000);
+//             database.query(`UPDATE users SET ${key} = '${value}', updated = ${time} WHERE id = '${user}'`, (error, result) => {
+//                 if(error) {
+//                     res.status(500).json({
+//                         status: 500,
+//                         message: 'There was an internal server error. Please try again soon.'
+//                     }); return;
+//                 }
+
+//                 res.status(200).json({
+//                     status: 200,
+//                     message: 'You have updated your user.'
+//                 }); return;
+//             });
+//         } else if(usersInfo.includes(key)) {
+//             // Update users_info table
+//         } else {
+//             // Invalid option
+//         }
+//     }
+// });
 
 export default router;
