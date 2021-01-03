@@ -17,9 +17,9 @@ router.get('/:user/profile', (req, res) => {
                 message: 'You must specify a user.'
             });
             return;
+        } else {
+            user = req.params.user;
         }
-
-        user = req.params.user;
     } else {
         if(req.params.user === '@me') {
             user = res.locals.data.result.user_id;
@@ -92,9 +92,9 @@ router.get('/:user/channel', async (req, res) => {
                 message: 'You must specify a user.'
             });
             return;
+        } else {
+            user = req.params.user;
         }
-
-        user = req.params.user;
     } else {
         if(req.params.user === '@me') {
             user = res.locals.data.result.user_id;

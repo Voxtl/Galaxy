@@ -30,13 +30,13 @@ export default function(req: any, res: any, next: any): void {
             if(origin === 'dev.voxtl.tv' || origin === 'voxtl.tv' || origin === 'localhost:2999') {
                 res.locals.guest = true;
                 next();
+            } else {
+                res.status(500).json({
+                    status: 500,
+                    message: 'There was an internal server error. Please try again soon.'
+                });
+                return;
             }
-
-            res.status(500).json({
-                status: 500,
-                message: 'There was an internal server error. Please try again soon.'
-            });
-            return;
         });
     } else {
         res.status(401).json({
