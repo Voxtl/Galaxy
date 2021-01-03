@@ -190,7 +190,7 @@ router.get('/:user/channel/key', async (req, res) => {
                     username: user.username
                 },
                 channel: {
-                    stream_key: user.id + user.stream_key
+                    stream_key: user.stream_key
                 }
             }
         });
