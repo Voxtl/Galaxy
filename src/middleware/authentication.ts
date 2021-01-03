@@ -23,7 +23,7 @@ export default function(req: any, res: any, next: any): void {
             next();
         }).catch(error => {
             let origin = req.get('origin') || '';
-            origin.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "").split('/')[0];
+            origin = origin.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "").split('/')[0];
 
             console.log(origin);
 
