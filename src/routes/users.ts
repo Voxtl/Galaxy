@@ -8,6 +8,7 @@ router.use(authentication);
 
 router.get('/:user/profile', (req, res) => {
     let user;
+    
     if(req.params.user === '@me') {
         user = res.locals.data.result.user_id;
     } else {
