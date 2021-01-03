@@ -96,7 +96,7 @@ router.get('/:user/channel', async (req, res) => {
 
         const user = result[0];
 
-        database.query('SELECT * FROM users_info WHERE id = ?', [user.id], function(error, result) {
+        database.query('SELECT * FROM users_info WHERE user_id = ?', [user.id], function(error, result) {
             if(error) {
                 console.error(error);
     
