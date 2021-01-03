@@ -8,6 +8,8 @@ import qs from 'qs';
 export default function(req: any, res: any, next: any): void {
     let token = req.get('Authorization');
 
+    res.locals.guest = false;
+
     if(typeof token === 'string' || token instanceof String) {
         token = token.slice(7);
 
@@ -25,7 +27,10 @@ export default function(req: any, res: any, next: any): void {
             let origin = req.get('origin') || '';
             origin = origin.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "").split('/')[0];
 
-            console.log(origin);
+            if(origin === 'dev.voxtl.tv' || origin === 'voxtl.tv' || origin === 'localhost:2999') {
+                res.locals.guest = true;
+                next();
+            }
 
             res.status(500).json({
                 status: 500,

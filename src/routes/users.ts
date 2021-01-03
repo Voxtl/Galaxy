@@ -9,10 +9,23 @@ router.use(authentication);
 router.get('/:user/profile', (req, res) => {
     let user;
     
-    if(req.params.user === '@me') {
-        user = res.locals.data.result.user_id;
-    } else {
+    // Check if guest
+    if(res.locals.guest) {
+        if(req.params.user === '@me') {
+            res.status(401).json({
+                status: 401,
+                message: 'You must specify a user.'
+            });
+            return;
+        }
+
         user = req.params.user;
+    } else {
+        if(req.params.user === '@me') {
+            user = res.locals.data.result.user_id;
+        } else {
+            user = req.params.user;
+        }
     }
 
     database.query('SELECT * FROM users WHERE id = ? OR username = ?', [user, user], function(error, result) {
@@ -70,10 +83,24 @@ router.get('/:user/profile', (req, res) => {
 
 router.get('/:user/channel', async (req, res) => {
     let user;
-    if(req.params.user === '@me') {
-        user = res.locals.data.result.user_id;
-    } else {
+
+    // Check if guest
+    if(res.locals.guest) {
+        if(req.params.user === '@me') {
+            res.status(401).json({
+                status: 401,
+                message: 'You must specify a user.'
+            });
+            return;
+        }
+
         user = req.params.user;
+    } else {
+        if(req.params.user === '@me') {
+            user = res.locals.data.result.user_id;
+        } else {
+            user = req.params.user;
+        }
     }
 
     database.query('SELECT * FROM users WHERE id = ? OR username = ?', [user, user], function(error, result) {
