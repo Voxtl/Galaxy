@@ -70,7 +70,7 @@ router.get('/:user/profile', (req, res) => {
                         username: user.username
                     },
                     profile: {
-                        avatar: user.avatar,
+                        avatar: userInfo.profile_avatar,
                         bio: userInfo.profile_bio,
                         description: userInfo.profile_description,
                     }
@@ -162,6 +162,7 @@ router.get('/:user/channel', async (req, res) => {
                         },
                         channel: {
                             title: userInfo.channel_title,
+                            thumbnail: userInfo.channel_thumbnail,
                             category: userInfo.channel_category,
                             viewers: {
                                 count: viewers.length,
