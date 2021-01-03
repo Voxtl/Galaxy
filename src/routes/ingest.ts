@@ -6,10 +6,9 @@ import authentication from '../middleware/authentication';
 const router = express.Router();
 
 router.post('/publish', (req, res) => {
-    const reqId = req.body.name.slice(0, 36);
-    const reqStreamKey = req.body.name.slice(36);
+    const reqStreamKey = req.body.name;
 
-    database.query('SELECT * FROM users WHERE id = ?', [reqId], function(error, result) {
+    database.query('SELECT * FROM users WHERE stream_key = ?', [reqStreamKey], function(error, result) {
         if(error) {
             console.error(error);
 
@@ -30,7 +29,7 @@ router.post('/publish', (req, res) => {
 
         const user = result[0];
 
-        database.query('SELECT * FROM users_info WHERE id = ?', [user.id], function(error, result) {
+        database.query('SELECT * FROM users_info WHERE user_id = ?', [user.id], function(error, result) {
             if(error) {
                 console.error(error);
     
@@ -64,10 +63,9 @@ router.post('/publish', (req, res) => {
 });
 
 router.post('/end', (req, res) => {
-    const reqId = req.body.name.slice(0, 36);
-    const reqStreamKey = req.body.name.slice(36);
+    const reqStreamKey = req.body.name;
 
-    database.query('SELECT * FROM users WHERE id = ?', [reqId], function(error, result) {
+    database.query('SELECT * FROM users WHERE stream_key = ?', [reqStreamKey], function(error, result) {
         if(error) {
             console.error(error);
 
@@ -88,7 +86,7 @@ router.post('/end', (req, res) => {
 
         const user = result[0];
 
-        database.query('SELECT * FROM users_info WHERE id = ?', [user.id], function(error, result) {
+        database.query('SELECT * FROM users_info WHERE user_id = ?', [user.id], function(error, result) {
             if(error) {
                 console.error(error);
     
