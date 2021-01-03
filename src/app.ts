@@ -44,3 +44,8 @@ app.use('/ingest', ingest);
 app.listen(port, '127.0.0.1', () => {
     console.log(`${chalk.bgGreen.black.bold('STATUS')} Galaxy is now listening on 127.0.0.1:${port}.`);
 });
+
+// TODO
+// - Error handling module
+// - Remake updating user
+// - Proper origin checking for guest and eventually oauth
