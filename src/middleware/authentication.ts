@@ -14,8 +14,10 @@ export default function(req: any, res: any, next: any): void {
         axios({
             method: 'post',
             url: 'https://auth.voxtl.tv/token/validate',
-            headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            data: qs.stringify({'access_token': token})
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded',
+                'Authorization': `Bearer ${token}`,
+            },
         }).then(response => {
             res.locals.data = response.data;
             next();
