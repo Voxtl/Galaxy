@@ -22,7 +22,8 @@ export default function(req: any, res: any, next: any): void {
             res.locals.data = response.data;
             next();
         }).catch(error => {
-            console.error(error);
+            console.error(req.get('host'));
+            console.error(req.get('origin'));
 
             res.status(500).json({
                 status: 500,
