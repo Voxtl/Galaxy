@@ -12,11 +12,11 @@ export class User {
         throw "unimplemented"
     }
 
-    find() {
+    get(id: string) {
         throw "unimplemented"
     }
 
-    findAll() {
+    bulk() {
         throw "unimplemented"
     }
 }

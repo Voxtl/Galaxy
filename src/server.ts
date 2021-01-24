@@ -1,11 +1,13 @@
 import express from "express"
 import { UserController } from "./controllers/UserController"
-import type { GalaxyOptions } from "./types/server"
 
 export class Server {
-    options: GalaxyOptions;
+    readonly options: {
+        address: string,
+        port: number
+    }
 
-    constructor(options: GalaxyOptions) {
+    constructor(options: {address: string, port: number}) {
         this.options = options
     }
 
@@ -17,10 +19,10 @@ export class Server {
 
         // User Controller
         const users = new UserController()
-        app.post("/v2/users", users.create())
-        app.get("/v2/users", users.getAll())
-        app.get("/v2/users/:id", users.get())
-        app.put("/v2/users/:id", users.update())
-        app.delete("/v2/users/:id", users.delete())
+        app.post("/v2/users", users.create)
+        app.get("/v2/users", users.findAll)
+        app.get("/v2/users/:id", users.find)
+        app.put("/v2/users/:id", users.update)
+        app.delete("/v2/users/:id", users.delete)
     }
 }
