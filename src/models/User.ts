@@ -16,7 +16,7 @@ export class User {
         throw "unimplemented"
     }
 
-    bulk() {
+    getBulk() {
         throw "unimplemented"
     }
 }

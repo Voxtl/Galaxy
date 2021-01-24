@@ -19,7 +19,7 @@ export class UserController {
         throw "unimplemented"
     }
 
-    find(req, res) {
+    get(req, res) {
         if(res.locals.guest && (req.params.user === "@me")) {
             return res.status(401).send({"message": "You must be logged in to specify yourself."})
         }
@@ -29,7 +29,7 @@ export class UserController {
         }
     }
     
-    findAll() {
+    getBulk() {
         throw "unimplemented"
     }
 }
