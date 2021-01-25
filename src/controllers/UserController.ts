@@ -1,31 +1,37 @@
 import { Request, Response } from "express"
-import { User } from "../models/User"
+import { UserModel } from "../models/UserModel"
+import type { Self, User } from "@voxtl/types"
 
 export class UserController {
-    private user: User
+    private user: UserModel
 
     constructor() {
-        this.user = new User
+        this.user = new UserModel
     }
 
-    create() {
+    create(): User {
         throw "unimplemented"
     }
 
-    update() {
+    update(): User {
         throw "unimplemented"
     }
 
-    delete() {
+    delete(): void {
         throw "unimplemented"
     }
 
-    get(req: Request, res: Response) {
+    get(req: Request, res: Response): User {
         // Weird type errors I need to solve before doing this
         throw "unimplemented"
     }
     
-    getBulk() {
+    getBulk(): User[] {
+        throw "unimplemented"
+    }
+
+    // Requires auth
+    self(): Self {
         throw "unimplemented"
     }
 }

@@ -1,17 +1,17 @@
-import { User } from "../models/User"
+import { UserModel } from "../models/UserModel"
 
 export class IngestController {
-    private user: User
+    private user: UserModel
 
     constructor() {
-        this.user = new User()
+        this.user = new UserModel()
     }
     
-    publish() {
+    publish(): void {
         throw "unimplemented"
     }
 
-    end() {
+    end(): void {
         throw "unimplemented"
     }
 }
