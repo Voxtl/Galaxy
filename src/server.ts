@@ -1,6 +1,7 @@
 import express from "express"
+import { IngestController } from "./controllers/IngestController"
 import { UserController } from "./controllers/UserController"
-import { Database } from "./database"
+import { Database } from "./Database"
 
 export class Server {
     readonly options: { address: string, port: number }
@@ -26,5 +27,9 @@ export class Server {
         app.get("/v2/users/:id", users.getBulk)
         app.put("/v2/users/:id", users.update)
         app.delete("/v2/users/:id", users.delete)
+
+        const ingest = new IngestController()
+        app.post("/v2/publish", ingest.publish)
+        app.post("/v2/end", ingest.end)
     }
 }

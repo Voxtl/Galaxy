@@ -1,12 +1,12 @@
 import { Sequelize } from "sequelize"
 
 export class Database {
-    readonly uri: string
+    private _uri: string
     public database: Sequelize
 
     constructor(uri: string) {
-        this.uri = uri
-        this.database = new Sequelize(this.uri)
+        this._uri = uri
+        this.database = new Sequelize(this._uri)
     }
 
     async testConnection(): Promise<void> {

@@ -1,3 +1,4 @@
+import { Request, Response } from "express"
 import { User } from "../models/User"
 
 export class UserController {
@@ -19,14 +20,9 @@ export class UserController {
         throw "unimplemented"
     }
 
-    get(req, res) {
-        if(res.locals.guest && (req.params.user === "@me")) {
-            return res.status(401).send({"message": "You must be logged in to specify yourself."})
-        }
-
-        if(res.params.id) {
-            return this.user.get(req.params.id)
-        }
+    get(req: Request, res: Response) {
+        // Weird type errors I need to solve before doing this
+        throw "unimplemented"
     }
     
     getBulk() {
