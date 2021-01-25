@@ -1,3 +1,4 @@
+import type { v5 as uuid } from "uuid"
 import type { Self, User } from "@voxtl/types"
 
 export class UserModel {
@@ -14,7 +15,11 @@ export class UserModel {
         throw "unimplemented"
     }
 
-    byID(id: string): User {
+    all(): User[] {
+        throw "unimplemented"
+    }
+
+    byID(id: typeof uuid): User {
         throw "unimplemented"
     }
 
