@@ -20,10 +20,10 @@ export class UserModel extends BaseModel {
         throw "unimplemented"
     }
 
-    byID(req: Request): User {
-        const isUUID = this._isUUID(req.params)
-
-        throw "unimplemented"
+    byID(req: Request): User | undefined {
+        if(!this._isUUID(req.params)) {
+            return undefined
+        }
     }
 
     bulk(): User[] {
