@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { UserModel } from "../models/UserModel"
-import type { Self, User } from "@voxtl/types"
+import type { BulkUser, Self, User } from "@voxtl/types"
 
 export class UserController {
     private user: UserModel
