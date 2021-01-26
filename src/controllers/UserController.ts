@@ -9,29 +9,35 @@ export class UserController {
         this.user = new UserModel
     }
 
-    create(): User {
+    create(req: Request<User>, response: Response<User>): void {
         throw "unimplemented"
     }
 
-    update(): User {
+    update(req: Request<User>, response: Response<User>): void {
         throw "unimplemented"
     }
 
-    delete(): void {
+    delete(req: Request): void {
         throw "unimplemented"
     }
 
-    get(req: Request, res: Response): User {
-        // Weird type errors I need to solve before doing this
-        throw "unimplemented"
+    async get(req: Request, res: Response<User | string>): Promise<void> {
+        // DB Logic first
+        try {
+            const user = await this.user.byID(req)
+
+            res.json(user)
+        } catch (error) {
+            res.status(404).send("ID provided is not valid UUID.")
+        }
     }
     
-    getBulk(): User[] {
+    getBulk(req: Request, res: Response<User[]>): void {
         throw "unimplemented"
     }
 
     // Requires auth
-    self(): Self {
+    self(req: Request, res: Response<Self>): void {
         throw "unimplemented"
     }
 }

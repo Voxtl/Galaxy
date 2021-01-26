@@ -1,6 +1,6 @@
 // Load NPM modules
 import { default as dotenv } from "dotenv"
-import { Server } from "./server"
+import { Server } from "./Server"
 
 // Initalise .env
 dotenv.config()

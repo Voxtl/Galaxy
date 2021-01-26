@@ -1,7 +1,8 @@
-import type { v5 as uuid } from "uuid"
 import type { Self, User } from "@voxtl/types"
+import type { Request } from "express"
+import { BaseModel } from "./BaseModel"
 
-export class UserModel {
+export class UserModel extends BaseModel {
     //TODO
     new(): User {
         throw "unimplemented"
@@ -19,7 +20,9 @@ export class UserModel {
         throw "unimplemented"
     }
 
-    byID(id: typeof uuid): User {
+    byID(req: Request): User {
+        const isUUID = this._isUUID(req.params)
+
         throw "unimplemented"
     }
 

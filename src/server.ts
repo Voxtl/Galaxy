@@ -20,6 +20,8 @@ export class Server {
             console.log(`Galaxy listening on: ${this.options.address}:${this.options.port}`)
         })
 
+        app.use(express.json()) 
+
         // User Controller
         const users = new UserController()
         app.post("/v2/users", users.create)
