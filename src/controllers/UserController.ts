@@ -32,7 +32,11 @@ export class UserController {
         }
     }
     
-    getBulk(req: Request, res: Response<User[]>): void {
+    all(req: Request, res: Response<User[]>): void {
+        throw "unimplemented"
+    }
+
+    getBulk(req: Request, res: Response<BulkUser[]>): void {
         throw "unimplemented"
     }
 
