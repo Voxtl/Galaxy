@@ -1,12 +1,12 @@
 import { Request, Response } from "express"
-import { UserModel } from "../models/UserModel"
 import type { BulkUser, Self, User } from "@voxtl/types"
+import { Database } from "../Database"
 
 export class UserController {
-    private user: UserModel
+    private database: Database
 
-    constructor() {
-        this.user = new UserModel
+    constructor(database: Database) {
+        this.database = database
     }
 
     create(req: Request<User>, response: Response<User>): void {
@@ -22,14 +22,7 @@ export class UserController {
     }
 
     async get(req: Request, res: Response<User | string>): Promise<void> {
-        // DB Logic first
-        try {
-            const user = await this.user.byID(req)
-
-            res.json(user)
-        } catch (error) {
-            res.status(404).send("ID provided is not valid UUID.")
-        }
+        throw "unimplemented"
     }
     
     all(req: Request, res: Response<User[]>): void {

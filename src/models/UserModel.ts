@@ -1,37 +1,15 @@
-import type { Self, User } from "@voxtl/types"
-import type { Request } from "express"
-import { BaseModel } from "./BaseModel"
+import { Model } from "sequelize"
+import type { GlobalRole, _UserAttributes } from "@voxtl/types"
+import type { v5 as uuid } from "uuid"
 
-export class UserModel extends BaseModel {
-    //TODO
-    new(): User {
-        throw "unimplemented"
-    }
+export class UserModel extends Model<_UserAttributes> implements _UserAttributes {
+    public id!: typeof uuid
+    public username!: string
+    public verified!: boolean
+    public global_role!: GlobalRole
 
-    update(): User[] {
-        throw "unimplemented"
-    }
+    public profile_id!: typeof uuid
+    public channel_id!: typeof uuid
 
-    delete(): void {
-        throw "unimplemented"
-    }
-
-    all(): User[] {
-        throw "unimplemented"
-    }
-
-    byID(req: Request): User | undefined {
-        if(!this._isUUID(req.params)) {
-            return undefined
-        }
-    }
-
-    bulk(): User[] {
-        throw "unimplemented"
-    }
-
-    // Requires auth
-    self(): Self {
-        throw "unimplemented"
-    }
+    public readonly created_at!: Date
 }

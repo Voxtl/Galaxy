@@ -1,18 +1,27 @@
 import { DataTypes, Sequelize } from "sequelize"
-import { UserTable } from "./database/UserTable"
+import { ChannelModel } from "./models/ChannelModel"
+import { ProfileModel } from "./models/ProfileModel"
+import { UserModel } from "./models/UserModel"
 
 export class Database {
     private _uri: string
     public database: Sequelize
-    public users: typeof UserTable
+
+    public users: typeof UserModel
+    public profiles: typeof ProfileModel
+    public channels: typeof ChannelModel
 
     constructor(uri: string) {
         this._uri = uri
         this.database = new Sequelize(this._uri)
-        this.users = UserTable
+        this.users = UserModel
+        this.profiles = ProfileModel
+        this.channels = ChannelModel
     }
 
     async createTables(): Promise<void> {
+        const sequelize = this.database
+        // Something tells me this'll be very long
         this.users.init(
             {
                 id: {
@@ -46,7 +55,8 @@ export class Database {
                 },
             },
             {
-                //todo fix this
+                tableName: "users",
+                sequelize
             }        
         )
     }
