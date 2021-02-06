@@ -1,6 +1,6 @@
 import { Database } from "../Database"
 
-export class ChannelController {
+export class ProfileController {
     private database: Database
 
     constructor(database: Database) {

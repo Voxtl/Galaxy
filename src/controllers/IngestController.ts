@@ -1,17 +1,18 @@
-import { UserModel } from "../models/UserModel"
+import { Database } from "../Database"
+import type { Request, Response } from "express"
 
 export class IngestController {
-    private user: UserModel
+    private database: Database
 
-    constructor() {
-        this.user = new UserModel()
+    constructor(database: Database) {
+        this.database = database
     }
     
-    publish(): void {
+    publish(req: Request, res: Response): void {
         throw "unimplemented"
     }
 
-    end(): void {
+    end(req: Request, res: Response): void {
         throw "unimplemented"
     }
 }

@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-import type { BulkUser, Self, User } from "@voxtl/types"
 import { Database } from "../Database"
+import type { BulkUser, Self, User } from "@voxtl/types"
 
 export class UserController {
     private database: Database
@@ -9,11 +9,11 @@ export class UserController {
         this.database = database
     }
 
-    create(req: Request<User>, response: Response<User>): void {
+    create(req: Request, res: Response<User>): void {
         throw "unimplemented"
     }
 
-    update(req: Request<User>, response: Response<User>): void {
+    update(req: Request, res: Response<User>): void {
         throw "unimplemented"
     }
 
@@ -21,7 +21,7 @@ export class UserController {
         throw "unimplemented"
     }
 
-    async get(req: Request, res: Response<User | string>): Promise<void> {
+    get(req: Request, res: Response<User | string>): Promise<void> {
         throw "unimplemented"
     }
     
