@@ -8,7 +8,11 @@ import type { v5 as uuid } from "uuid"
 export class UserModel extends Model<_UserAttributes> implements _UserAttributes {
     // Data
     public id!: typeof uuid
+    public email!: string
+    public password_hash!: string
+    public password_salt!: string
     public username!: string
+
     public verified!: boolean
     public global_role!: GlobalRole
 
