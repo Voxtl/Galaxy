@@ -1,5 +1,6 @@
 {
     "env": {
+        "browser": true,
         "es2021": true,
         "node": true
     },
@@ -26,11 +27,11 @@
         ],
         "quotes": [
             "error",
-            "single"
+            "double"
         ],
         "semi": [
             "error",
-            "always"
+            "never"
         ]
     }
 }
