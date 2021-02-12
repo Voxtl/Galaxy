@@ -1,8 +1,10 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import { Column, CreateDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import { User } from "../UserEntity"
 
 import type { v5 as uuid } from "uuid"
 import type {
     GlobalRole as GlobalRoleAttributes,
+    User as UserAttributes,
     Permissions
 } from "@voxtl/types"
 
@@ -13,6 +15,9 @@ export class GlobalRole implements GlobalRoleAttributes {
 
     @Column()
     permissions!: Permissions
+
+    @ManyToMany(() => User, user => user.roles)
+    users!: UserAttributes[]
 
     @CreateDateColumn()
     readonly created_at!: Date

@@ -1,13 +1,14 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 import { User } from "./UserEntity"
 import { Channel } from "./ChannelEntity"
+import { ChannelRole } from "./roles/ChannelRoleEntity"
 
 import type { v5 as uuid } from "uuid"
 import type {
     Viewer as ViewerAttributes,
     User as UserAttributes,
     Channel as ChannelAttributes,
-    ChannelRole
+    ChannelRole as ChannelRoleAttributes
 } from "@voxtl/types"
 
 @Entity()
@@ -21,8 +22,8 @@ export class Viewer implements ViewerAttributes {
     @ManyToOne(() => Channel, channel => channel.viewers)
     channel!: ChannelAttributes
 
-    @Column()
-    role!: ChannelRole
+    @ManyToMany(() => ChannelRole, channelRole => channelRole.viewers)
+    roles!: ChannelRoleAttributes[]
 
     @Column()
     banned!: boolean

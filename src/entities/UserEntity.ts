@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, OneToMany, Generated, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, OneToMany, Generated, CreateDateColumn, UpdateDateColumn, ManyToMany } from "typeorm"
 import { Viewer } from "./ViewerEntity"
 import { Profile } from "./ProfileEntity"
 import { Channel } from "./ChannelEntity" 
@@ -35,8 +35,8 @@ export class User implements UserAttributes {
     @Column()
     verified!: boolean
 
-    @OneToOne(() => GlobalRole)
-    role!: GlobalRoleAttributes
+    @ManyToMany(() => GlobalRole, globalRole => globalRole.users)
+    roles!: GlobalRoleAttributes[]
 
     @Generated("uuid")
     stream_key!: typeof uuid
