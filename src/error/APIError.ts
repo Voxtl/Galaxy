@@ -1,3 +1,8 @@
 export class APIError extends Error {
-    //TODO: have errors construct with http codes and stuff.
+    public status: number
+
+    constructor(status: number, message: string) {
+        super(message)
+        this.status = status
+    }
 }

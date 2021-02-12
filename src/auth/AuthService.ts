@@ -9,17 +9,23 @@ export class AuthService {
     }
 
     async signUp(creds, database: Database) {
+        const user = "whatever"
         // check if exists from username and email (maybe)
+
 
         // hash and salt
         const salt = randomBytes(32)
-        const hashedPassword = await argon2.hash(creds.password)
+        const hashedPassword = await argon2.hash(creds.password, { salt })
 
         // create model(s)
         throw "unimplemented"
     }
 
-    signIn(creds, User: Database) {
+    async signIn(creds, database: Database) {
+        const user = "whatever"
+
+        const isValidPassword = await argon2.verify(user.password, creds.password)
+
         throw "unimplemented"
     }
 } 

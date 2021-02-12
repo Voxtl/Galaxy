@@ -1,4 +1,6 @@
 // Load NPM modules
+import "reflect-metadata"
+
 import { default as dotenv } from "dotenv"
 import { Server } from "./Server"
 

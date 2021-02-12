@@ -1,16 +1,15 @@
 import express from "express"
+import { createConnection } from "typeorm"
 import { IngestController } from "./controllers/IngestController"
 import { ProfileController } from "./controllers/ProfileController"
 import { UserController } from "./controllers/UserController"
-import { Database } from "./Database"
 
 export class Server {
     readonly options: { address: string, port: number }
-    private database: Database
 
     constructor(options: {address: string, port: number}) {
         this.options = options
-        this.database = new Database(process.env.DB_URI as string)
+        this.database = undefined
     }
 
     public async init(): Promise<void> {

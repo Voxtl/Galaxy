@@ -4,6 +4,8 @@ import type { Request, Response } from "express"
 export class IngestController {
     private database: Database
 
+    //TODO: Implement controllers in try/catch 
+
     constructor(database: Database) {
         this.database = database
     }

@@ -5,6 +5,8 @@ import type { BulkUser, Self, User } from "@voxtl/types"
 export class UserController {
     private database: Database
 
+    //TODO: Implement controllers in try/catch 
+
     constructor(database: Database) {
         this.database = database
     }
