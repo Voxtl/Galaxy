@@ -1,42 +1,51 @@
 import { Request, Response } from "express"
-import { Database } from "../Database"
-import type { BulkUser, Self, User } from "@voxtl/types"
+import { AuthService } from "../auth/AuthService"
+import { User } from "../entities/UserEntity"
+import { Connection, getConnection } from "typeorm"
+import type { User as UserAttributes } from "@voxtl/types"
 
 export class UserController {
-    private database: Database
+    #auth: AuthService
+    connection: Connection
+
+    constructor() {
+        this.#auth = new AuthService
+        this.connection = getConnection()
+    }
 
     //TODO: Implement controllers in try/catch 
-
-    constructor(database: Database) {
-        this.database = database
-    }
-
-    create(req: Request, res: Response<User>): void {
+    create(req: Request, res: Response<UserAttributes>): void {
         throw "unimplemented"
     }
 
-    update(req: Request, res: Response<User>): void {
-        throw "unimplemented"
+    update(req: Request<UserAttributes>, res: Response<UserAttributes>): void {
+        const authed = req.headers.authorization ? 
+            this.#auth.signIn(req.headers.authorization, req.params.id) 
+            : undefined
     }
 
-    delete(req: Request): void {
-        throw "unimplemented"
+    delete(req: Request<UserAttributes>): void {
+        const authed = req.headers.authorization ? 
+            this.#auth.signIn(req.headers.authorization, req.params.id) 
+            : undefined
     }
 
-    get(req: Request, res: Response<User | string>): Promise<void> {
-        throw "unimplemented"
+    async get(req: Request<UserAttributes>, res: Response<UserAttributes>): Promise<void> {
+        try {
+            const authed = req.headers.authorization ? 
+                this.#auth.signIn(req.headers.authorization, req.params.id) 
+                : undefined
+
+            const user = await this.connection.manager.findOne(User, { id: req.params.id })
+            
+            res.status(200).send(user)
+        } catch (error) {
+            const code = error.code ? error.code : 500
+            res.status(code).send(error)
+        } 
     }
     
-    all(req: Request, res: Response<User[]>): void {
-        throw "unimplemented"
-    }
-
-    getBulk(req: Request, res: Response<BulkUser[]>): void {
-        throw "unimplemented"
-    }
-
-    // Requires auth
-    self(req: Request, res: Response<Self>): void {
+    all(req: Request, res: Response<UserAttributes[]>): void {
         throw "unimplemented"
     }
 }
