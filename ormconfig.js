@@ -6,7 +6,7 @@ module.exports = {
     password: process.env.DB_PASS,
     database: "galaxy",
     synchronize: true,
-    logging: false,
+    logging: true,
     entities: [
         "src/entities/**/*.ts"
     ],
@@ -20,5 +20,12 @@ module.exports = {
         "entitiesDir": "src/entities",
         "migrationsDir": "migrations",
         "subscribersDir": "src/subscriber"
+    },
+    cache: {
+        type: "redis",
+        options: {
+            host: "localhost",
+            port: 6739
+        }
     }
 }
